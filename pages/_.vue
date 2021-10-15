@@ -28,7 +28,7 @@ export default {
   },
   mounted () {
     this.storyblokInstance = new StoryblokBridge({
-        customParent: 'http://localhost:3000',
+       // customParent: 'http://localhost:3000',
         preventClicks: true,
         resolveRelations: ['feature.author'],
       })
