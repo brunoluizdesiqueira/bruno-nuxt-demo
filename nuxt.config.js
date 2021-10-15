@@ -55,12 +55,7 @@ module.exports = {
       { rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.0.9/css/all.css' },
       { rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i' }
-    ],
-    // script: [
-    //   {
-    //     src: "//app.storyblok.com/f/storyblok-v2-latest.js",
-    //   },
-    // ]
+    ]
   },
   /*
   ** Customize the progress bar color

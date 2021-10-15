@@ -30,7 +30,7 @@ export default {
   mounted () {
     this.$storybridge(() => {
       const storyblokInstance = new StoryblokBridge({
-        customParent: 'http://localhost:3000',
+        customParent: 'https://bruno-nuxt-demo.vercel.app/',
         preventClicks: true,
         resolveRelations: ['feature.author'],
       })
