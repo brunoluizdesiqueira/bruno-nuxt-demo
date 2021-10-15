@@ -27,7 +27,14 @@ export default {
     return { story: { content: {} } }
   },
   mounted () {
-    this.$storybridge.on(['input', 'published', 'change'], (event) => {
+    this.storyblokInstance = new StoryblokBridge({
+        customParent: 'http://localhost:3300',
+        preventClicks: false,
+        resolveRelations: ['feature.author'],
+      })
+
+    this.storyblokInstance.on(['input', 'published', 'change'], (event) => {
+      console.log(this.story.content)
       if (event.action == 'input') {
         if (event.story.id === this.story.id) {
           this.story.content = event.story.content
