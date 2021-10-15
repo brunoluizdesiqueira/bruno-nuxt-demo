@@ -21,47 +21,46 @@ const loadData = function({api, cacheVersion, errorCallback, version, path}) {
     }
   })
 }
-
 export default {
   data () {
-    return { story: { content: {} } }
+    return {
+      story: { content: {} }
+    }
   },
   mounted () {
-  this.$storybridge.on(['input', 'published', 'change'], (event) => {
-      if (event.action == 'input') {
-        if (event.story.id === this.story.id) {
-          this.story.content = event.story.content
+    this.$storybridge(() => {
+      const storyblokInstance = new StoryblokBridge({
+        customParent: 'http://localhost:3000',
+        preventClicks: true,
+        resolveRelations: ['feature.author'],
+      })
+
+      storyblokInstance.on(['input', 'published', 'change'], (event) => {
+        if (event.action == 'input') {
+          if (event.story.id === this.story.id) {
+            this.story.content = event.story.content
+          }
+        } else {
+          window.location.reload()
         }
-      } else if (!event.slugChanged) {
-        window.location.reload()
-      }
+      })
+    }, (error) => {
+      console.error(error)
     })
   },
   asyncData (context) {
-    // Check if we are in the editor mode
-    let editMode = false
-
-    if (context.query._storyblok || context.isDev || (window && window.localStorage.getItem('_storyblok_draft_mode'))) {
-      if (window) {
-        window.localStorage.setItem('_storyblok_draft_mode', '1')
-        if (window.location == window.parent.location) {
-          window.localStorage.removeItem('_storyblok_draft_mode')
-        }
+    return context.app.$storyapi.get('cdn/stories/home', {
+      version: 'draft'
+    }).then((res) => {
+      return res.data
+    }).catch((res) => {
+      if (!res.response) {
+        console.error(res)
+        context.error({ statusCode: 404, message: 'Failed to receive content form api' })
+      } else {
+        console.error(res.response.data)
+        context.error({ statusCode: res.response.status, message: res.response.data })
       }
-
-      editMode = true
-    }
-
-    let version = editMode ? 'draft' : 'published'
-    let path = context.route.path == '/' ? 'home' : context.route.path
-
-    // Load the JSON from the API
-    return loadData({
-      version: version,
-      api: context.app.$storyapi,
-      cacheVersion: context.store.state.cacheVersion,
-      errorCallback: context.error,
-      path: path
     })
   }
 }
